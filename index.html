@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task Manager</title>
+
+    <link
+      rel="shortcut icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌻</text></svg>"
+      type="image/x-icon"
+    />
+
+    <link
+      rel="apple-touch-icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌻</text></svg>"
+      type="image/x-icon"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+      integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <link rel="stylesheet" href="./styles/index.css" />
+    <script src="./scripts/index.js" defer></script>
+  </head>
+  <body>
+    <main class="management-container">
+      <div class="project-container" data-project-name="teams">
+        <div class="title-container">
+          <h4>Teams</h4>
+          <button class="close-btn">
+            <i class="fas fa-close project-close-btn"></i>
+          </button>
+        </div>
+
+        <div class="card-container">
+          <div class="card-heading">
+            <h5 class="card-title">Team Task - 1</h5>
+            <button class="close-card-btn">
+              <i class="fas fa-close close-card"></i>
+            </button>
+          </div>
+          <p class="card-description">Dashboard analytics data extraction</p>
+        </div>
+
+        <div class="add-new-card">
+          <input
+            type="text"
+            placeholder="Card title...."
+            class="card-new-title common-input-styles"
+          />
+          <input
+            type="text"
+            placeholder="Card description...."
+            class="card-new-description common-input-styles"
+          />
+          <button class="add-new-card-btn common-btn-styles">Add</button>
+        </div>
+      </div>
+
+      <div class="project-container" data-project-name="pods">
+        <div class="title-container">
+          <h4>Products</h4>
+          <button class="close-btn">
+            <i class="fas fa-close project-close-btn"></i>
+          </button>
+        </div>
+
+        <div class="card-container">
+          <div class="card-heading">
+            <h5 class="card-title">Product ABC</h5>
+            <button class="close-card-btn">
+              <i class="fas fa-close close-card"></i>
+            </button>
+          </div>
+          <p class="card-description">Product Market fit analysis</p>
+        </div>
+
+        <div class="add-new-card">
+          <input
+            type="text"
+            placeholder="Card title...."
+            class="card-new-title common-input-styles"
+          />
+          <input
+            type="text"
+            placeholder="Card description...."
+            class="card-new-description common-input-styles"
+          />
+          <button class="add-new-card-btn common-btn-styles">Add</button>
+        </div>
+      </div>
+
+      <div class="project-container">
+        <div class="add-new-list">
+          <input
+            type="text"
+            placeholder="List Title...."
+            class="list-title common-input-styles"
+          />
+          <button class="add-new-list-btn common-btn-styles">Add</button>
+        </div>
+        <!-- <div class="title-container">
+          <h4>Products</h4>
+          <button class="close-btn">
+            <i class="fas fa-close"></i>
+          </button>
+        </div> -->
+      </div>
+    </main>
+  </body>
+</html>
