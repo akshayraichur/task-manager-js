@@ -25,6 +25,13 @@ const addNewTask = (event) => {
             </button>
         </div>
         <p class="card-description">${cardDescription.value}</p>
+        <select name="task-progress" id="task-progress" class="task-progress">
+            <option value="todo">Todo</option>
+            <option value="in-progress">In Progress</option>
+            <option value="in-review">In Review</option>
+            <option value="testing">Testing</option>
+            <option value="completed">Completed</option>
+          </select>
       `;
 
     projectRoot.insertBefore(newCardContainer, addNewCardContainer);
