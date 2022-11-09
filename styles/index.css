@@ -18,6 +18,10 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
+.heading {
+  padding: 1rem 0rem 0rem 1rem;
+}
+
 .management-container {
   display: flex;
   width: 100%;
@@ -72,6 +76,17 @@ body {
   border-radius: 5px;
 }
 
+.completed-card {
+  width: 250px;
+  margin: 0.5rem;
+  height: 100%;
+}
+
+.completed {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .common-input-styles {
   width: 100%;
   padding: 0.5rem;
@@ -98,4 +113,10 @@ body {
   background-color: var(--seconndary-color);
   padding: 1rem;
   border-radius: 5px;
+}
+
+@media only screen and (max-width: 500px) {
+  .completed-card {
+    width: 100%;
+  }
 }
