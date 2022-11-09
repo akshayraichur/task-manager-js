@@ -1,5 +1,3 @@
-const taskProgress = document.querySelector('.task-progress');
-
 const addNewTask = (event) => {
   // Instead of the below, we can do parentNode.parentNode
   // const parentElement = event.path.find((item) => {
@@ -148,10 +146,15 @@ const handleClickListener = (event) => {
   }
 };
 
+const handleChangeListener = (e) => {
+  if (e.target.classList.contains('task-progress')) {
+    updateTaskProgress(e);
+  }
+};
+
 const App = () => {
   document.addEventListener('click', handleClickListener);
-
-  taskProgress.addEventListener('change', updateTaskProgress);
+  document.addEventListener('change', handleChangeListener);
 };
 
 App();
