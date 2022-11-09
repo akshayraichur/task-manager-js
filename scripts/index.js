@@ -1,3 +1,5 @@
+const taskProgress = document.querySelector('.task-progress');
+
 const addNewTask = (event) => {
   // Instead of the below, we can do parentNode.parentNode
   // const parentElement = event.path.find((item) => {
@@ -103,6 +105,31 @@ const deleteProject = (event) => {
   mainContainer.removeChild(projectContainer);
 };
 
+const updateTaskProgress = (event) => {
+  if (event.target.value === 'completed') {
+    const cardContainer = event.target.parentNode;
+    const projectContainer = event.target.parentNode.parentNode;
+
+    const cardDescription = event.target.previousElementSibling;
+    const cardTitle = cardDescription.previousElementSibling;
+
+    const completedTasks = document.querySelector('.completed');
+    const newCompletedTask = document.createElement('div');
+    newCompletedTask.className = 'completed-card card-container';
+    newCompletedTask.innerHTML = `
+      <div class="card-heading">
+        <h5 class="card-title">${cardTitle.textContent}</h5>
+      </div>
+      <p class="card-description">${cardDescription.textContent}</p>
+    `;
+
+    completedTasks.appendChild(newCompletedTask);
+
+    // before this, add it inside completed tasks
+    projectContainer.removeChild(cardContainer);
+  }
+};
+
 const handleClickListener = (event) => {
   if (event.target.classList.contains('add-new-card-btn')) {
     addNewTask(event);
@@ -123,6 +150,8 @@ const handleClickListener = (event) => {
 
 const App = () => {
   document.addEventListener('click', handleClickListener);
+
+  taskProgress.addEventListener('change', updateTaskProgress);
 };
 
 App();
