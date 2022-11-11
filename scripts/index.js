@@ -1,17 +1,15 @@
 const addNewTask = (event) => {
-  // Instead of the below, we can do parentNode.parentNode
-  // const parentElement = event.path.find((item) => {
-  //   if (item.classList) return item.classList.contains('project-container');
-  //   else return false;
-  // });
-
-  // console.log(parentElement);
-
   const addNewCardContainer = event.target.parentNode;
   const cardDescription = event.target.previousElementSibling;
   const cardTitle = cardDescription.previousElementSibling;
 
-  const projectRoot = event.target.parentNode.parentNode;
+  // event.path gives out the path through which event got bubbled up.
+  // in this path, we are finding the parent element of the container.
+  const projectRoot = event.path.find((el) =>
+    el.classList?.contains('project-container')
+  );
+
+  // const projectRoot = event.target.parentNode.parentNode;
 
   if (cardTitle.value.trim() && cardDescription.value.trim()) {
     const newCardContainer = document.createElement('div');
@@ -36,28 +34,38 @@ const addNewTask = (event) => {
 
     projectRoot.insertBefore(newCardContainer, addNewCardContainer);
 
-    // let oldData = JSON.stringify(localStorage.getItem('tasks'));
-
-    // let allCards = projectRoot.querySelectorAll('.card-container');
-
     cardTitle.value = '';
     cardDescription.value = '';
   }
 };
 
 const deleteTask = (event) => {
-  // TODO: Evaluate the below process
-  // this is not an effecient process if we decide to have much more elements in the future.
-  // in such case, it would be good to use event.path but this would loop through an array to find out. whose complexity will be o(n)
-  const targetCardContainer = event.target.parentNode.parentNode.parentNode;
-  const projectRoot = event.target.parentNode.parentNode.parentNode.parentNode;
+  /**
+   * this is not an effecient process if we decide to have much more elements in the future. in such case, it would be good to use event.path but this would loop through an array to find out. whose complexity will be o(n)
+   */
+  // const targetCardContainer = event.target.parentNode.parentNode.parentNode;
+  // const projectRoot = event.target.parentNode.parentNode.parentNode.parentNode;
+
+  const targetCardContainer = event.path.find((el) =>
+    el.classList?.contains('card-container')
+  );
+  const projectRoot = event.path.find((el) =>
+    el.classList?.contains('project-container')
+  );
 
   projectRoot.removeChild(targetCardContainer);
 };
 
 const addNewProject = (event) => {
-  const mainContainer = event.target.parentNode.parentNode.parentNode;
-  const currentProjectContainer = event.target.parentNode.parentNode;
+  const mainContainer = event.path.find((el) =>
+    el.classList?.contains('management-container')
+  );
+  const currentProjectContainer = event.path.find((el) =>
+    el.classList?.contains('project-container')
+  );
+
+  // const mainContainer = event.target.parentNode.parentNode.parentNode;
+  // const currentProjectContainer = event.target.parentNode.parentNode;
 
   const inputEl = event.target.previousElementSibling;
   if (inputEl.value.trim()) {
@@ -97,9 +105,17 @@ const addNewProject = (event) => {
 };
 
 const deleteProject = (event) => {
-  const mainContainer =
-    event.target.parentNode.parentNode.parentNode.parentNode;
-  const projectContainer = event.target.parentNode.parentNode.parentNode;
+  const mainContainer = event.path.find((el) =>
+    el.classList?.contains('management-container')
+  );
+
+  const projectContainer = event.path.find((el) =>
+    el.classList?.contains('project-container')
+  );
+
+  // const mainContainer =
+  //   event.target.parentNode.parentNode.parentNode.parentNode;
+  // const projectContainer = event.target.parentNode.parentNode.parentNode;
   mainContainer.removeChild(projectContainer);
 };
 
