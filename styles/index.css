@@ -15,10 +15,17 @@
 body {
   background-color: var(--seconndary-color);
   color: var(--text-color);
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Noto Sans', sans-serif;
+}
+
+h4 {
+  font-weight: 900;
+  font-size: 1.2rem;
+  color: var(--seconndary-color);
 }
 
 .heading {
+  font-weight: 900;
   padding: 1rem 0rem 0rem 1rem;
 }
 
@@ -94,7 +101,7 @@ body {
   border-radius: 5px;
   border: 1px solid var(--primary-color);
   outline: 0;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Noto Sans', sans-serif;
 }
 
 .common-btn-styles {
@@ -102,7 +109,7 @@ body {
   cursor: pointer;
   border: none;
   outline: 0;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Noto Sans', sans-serif;
   border-radius: 5px;
   margin: 0.2rem 0;
   background-color: var(--primary-color);
@@ -120,7 +127,7 @@ body {
   width: 50%;
   padding: 0.5rem 0;
   border-radius: 5px;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Noto Sans', sans-serif;
   cursor: pointer;
   margin: 0.5rem 0;
 }
