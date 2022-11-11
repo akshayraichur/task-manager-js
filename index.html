@@ -34,7 +34,7 @@
     />
 
     <link rel="stylesheet" href="./styles/index.css" />
-    <script src="./scripts/index.js" defer></script>
+    <script type="module" src="./scripts/index.js" defer></script>
   </head>
   <body>
     <h2 class="heading">Welcome to Task Manager</h2>
@@ -76,7 +76,12 @@
             placeholder="Card description...."
             class="card-new-description common-input-styles"
           />
-          <button class="add-new-card-btn common-btn-styles">Add</button>
+          <button
+            class="add-new-card-btn common-btn-styles"
+            data-project-name="teams"
+          >
+            Add
+          </button>
         </div>
       </div>
 
@@ -116,7 +121,12 @@
             placeholder="Card description...."
             class="card-new-description common-input-styles"
           />
-          <button class="add-new-card-btn common-btn-styles">Add</button>
+          <button
+            class="add-new-card-btn common-btn-styles"
+            data-project-name="pods"
+          >
+            Add
+          </button>
         </div>
       </div>
 

@@ -1,13 +1,21 @@
+import { managementContainer } from './constants.js';
+
 const addNewTask = (event) => {
   const addNewCardContainer = event.target.parentNode;
   const cardDescription = event.target.previousElementSibling;
   const cardTitle = cardDescription.previousElementSibling;
 
+  // instead of having to run a loop, we can get the data like this as well.
+  const attributeName = event.target.getAttribute('data-project-name');
+  const projectRoot = managementContainer.querySelector(
+    `[data-project-name="${attributeName}"]`
+  );
+
   // event.path gives out the path through which event got bubbled up.
   // in this path, we are finding the parent element of the container.
-  const projectRoot = event.path.find((el) =>
-    el.classList?.contains('project-container')
-  );
+  // const projectRoot = event.path.find((el) =>
+  //   el.classList?.contains('project-container')
+  // );
 
   // const projectRoot = event.target.parentNode.parentNode;
 
@@ -57,6 +65,7 @@ const deleteTask = (event) => {
 };
 
 const addNewProject = (event) => {
+  // managementContainer
   const mainContainer = event.path.find((el) =>
     el.classList?.contains('management-container')
   );
@@ -90,7 +99,7 @@ const addNewProject = (event) => {
         placeholder="Card description...."
         class="card-new-description common-input-styles"
       />
-      <button class="add-new-card-btn common-btn-styles">Add</button>
+      <button class="add-new-card-btn common-btn-styles" data-project-name="${inputEl.value}">Add</button>
     </div>
     `;
 
