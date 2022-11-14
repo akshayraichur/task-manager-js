@@ -173,5 +173,53 @@
         </div>
       </div>
     </div>
+
+    <template id="project-container-template">
+      <div class="title-container">
+        <h4></h4>
+        <button class="close-btn">
+          <i class="fas fa-close project-close-btn"></i>
+        </button>
+      </div>
+      <div class="add-new-card">
+        <input
+          type="text"
+          placeholder="Card title...."
+          class="card-new-title common-input-styles"
+        />
+        <input
+          type="text"
+          placeholder="Card description...."
+          class="card-new-description common-input-styles"
+        />
+        <button class="add-new-card-btn common-btn-styles" data-project-name="">
+          Add
+        </button>
+      </div>
+    </template>
+
+    <template id="completed-add-card-template">
+      <div class="card-heading">
+        <h5 class="card-title"></h5>
+      </div>
+      <p class="card-description"></p>
+    </template>
+
+    <template id="card-template">
+      <div class="card-heading">
+        <h5 class="card-title"></h5>
+        <button class="close-card-btn">
+          <i class="fas fa-close close-card"></i>
+        </button>
+      </div>
+      <p class="card-description"></p>
+      <select name="task-progress" id="task-progress" class="task-progress">
+        <option value="todo">Todo</option>
+        <option value="in-progress">In Progress</option>
+        <option value="in-review">In Review</option>
+        <option value="testing">Testing</option>
+        <option value="completed">Completed</option>
+      </select>
+    </template>
   </body>
 </html>

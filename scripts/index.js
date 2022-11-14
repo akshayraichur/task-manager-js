@@ -23,22 +23,35 @@ const addNewTask = (event) => {
     const newCardContainer = document.createElement('div');
     newCardContainer.classList.add('card-container');
 
-    newCardContainer.innerHTML = `
-        <div class="card-heading">
-          <h5 class="card-title">${cardTitle.value}</h5>
-          <button class="close-card-btn">
-              <i class="fas fa-close close-card"></i>
-            </button>
-        </div>
-        <p class="card-description">${cardDescription.value}</p>
-        <select name="task-progress" id="task-progress" class="task-progress">
-            <option value="todo">Todo</option>
-            <option value="in-progress">In Progress</option>
-            <option value="in-review">In Review</option>
-            <option value="testing">Testing</option>
-            <option value="completed">Completed</option>
-          </select>
-      `;
+    // Using HTML Templates
+    const cardTemplate = document.querySelector('#card-template');
+    const newCard = cardTemplate.content.cloneNode(true);
+    newCardContainer.appendChild(newCard);
+
+    const newCardTitle = newCardContainer.querySelector('.card-title');
+    newCardTitle.textContent = cardTitle.value;
+
+    const newCardDescription =
+      newCardContainer.querySelector('.card-description');
+    newCardDescription.textContent = cardDescription.value;
+
+    // Using innerHTML
+    // newCardContainer.innerHTML = `
+    //     <div class="card-heading">
+    //       <h5 class="card-title">${cardTitle.value}</h5>
+    //       <button class="close-card-btn">
+    //           <i class="fas fa-close close-card"></i>
+    //         </button>
+    //     </div>
+    //     <p class="card-description">${cardDescription.value}</p>
+    //     <select name="task-progress" id="task-progress" class="task-progress">
+    //         <option value="todo">Todo</option>
+    //         <option value="in-progress">In Progress</option>
+    //         <option value="in-review">In Review</option>
+    //         <option value="testing">Testing</option>
+    //         <option value="completed">Completed</option>
+    //       </select>
+    //   `;
 
     projectRoot.insertBefore(newCardContainer, addNewCardContainer);
 
@@ -81,27 +94,45 @@ const addNewProject = (event) => {
     const projectContainer = document.createElement('div');
     projectContainer.classList.add('project-container');
     projectContainer.setAttribute('data-project-name', inputEl.value);
-    projectContainer.innerHTML = `
-    <div class="title-container">
-      <h4>${inputEl.value}</h4>
-      <button class="close-btn">
-        <i class="fas fa-close project-close-btn"></i>
-      </button>
-    </div>
-    <div class="add-new-card">
-      <input
-        type="text"
-        placeholder="Card title...."
-        class="card-new-title common-input-styles"
-      />
-      <input
-        type="text"
-        placeholder="Card description...."
-        class="card-new-description common-input-styles"
-      />
-      <button class="add-new-card-btn common-btn-styles" data-project-name="${inputEl.value}">Add</button>
-    </div>
-    `;
+    const projectContainerTemplate = document.querySelector(
+      '#project-container-template'
+    );
+
+    // Using HTML Templates
+    const newProject = projectContainerTemplate.content.cloneNode(true);
+
+    projectContainer.appendChild(newProject);
+    const newProjectTitle = projectContainer.querySelector(
+      '.title-container h4'
+    );
+
+    newProjectTitle.textContent = inputEl.value;
+    const newProjectBtn = projectContainer.querySelector('.add-new-card-btn');
+    newProjectBtn.textContent = 'Add';
+    newProjectBtn.setAttribute('data-project-name', `${inputEl.value}`);
+
+    // INNER-HTML Method
+    // projectContainer.innerHTML = `
+    // <div class="title-container">
+    //   <h4>${inputEl.value}</h4>
+    //   <button class="close-btn">
+    //     <i class="fas fa-close project-close-btn"></i>
+    //   </button>
+    // </div>
+    // <div class="add-new-card">
+    //   <input
+    //     type="text"
+    //     placeholder="Card title...."
+    //     class="card-new-title common-input-styles"
+    //   />
+    //   <input
+    //     type="text"
+    //     placeholder="Card description...."
+    //     class="card-new-description common-input-styles"
+    //   />
+    //   <button class="add-new-card-btn common-btn-styles" data-project-name="${inputEl.value}">Add</button>
+    // </div>
+    // `;
 
     mainContainer.insertBefore(projectContainer, currentProjectContainer);
 
@@ -139,12 +170,27 @@ const updateTaskProgress = (event) => {
     const completedTasks = document.querySelector('.completed');
     const newCompletedTask = document.createElement('div');
     newCompletedTask.className = 'completed-card card-container';
-    newCompletedTask.innerHTML = `
-      <div class="card-heading">
-        <h5 class="card-title">${cardTitle.textContent}</h5>
-      </div>
-      <p class="card-description">${cardDescription.textContent}</p>
-    `;
+
+    // Using HTML Templates
+    const completedCardTemplate = document.querySelector(
+      '#completed-add-card-template'
+    );
+    const completedCard = completedCardTemplate.content.cloneNode(true);
+    newCompletedTask.appendChild(completedCard);
+
+    const completedCardTitle = newCompletedTask.querySelector('.card-title');
+    completedCardTitle.textContent = cardTitle.textContent;
+    const completedCardDesc =
+      newCompletedTask.querySelector('.card-description');
+    completedCardDesc.textContent = cardDescription.textContent;
+
+    // inner html method
+    // newCompletedTask.innerHTML = `
+    //   <div class="card-heading">
+    //     <h5 class="card-title">${cardTitle.textContent}</h5>
+    //   </div>
+    //   <p class="card-description">${cardDescription.textContent}</p>
+    // `;
 
     completedTasks.appendChild(newCompletedTask);
 
