@@ -77,6 +77,22 @@ const deleteTask = (event) => {
   projectRoot.removeChild(targetCardContainer);
 };
 
+const duplicateNameCheck = (inputName) => {
+  const allProjectNodes =
+    managementContainer.querySelectorAll('.project-container');
+
+  let bool = false;
+
+  allProjectNodes.forEach((project) => {
+    if (project.getAttribute('data-project-name') === inputName.toLowerCase()) {
+      bool = true;
+      return;
+    }
+  });
+
+  return bool;
+};
+
 const addNewProject = (event) => {
   // managementContainer
   const mainContainer = event.path.find((el) =>
@@ -91,7 +107,15 @@ const addNewProject = (event) => {
 
   const inputEl = event.target.previousElementSibling;
 
-  // TODO: find out no other project has the same name.
+  let duplicateCheck = duplicateNameCheck(inputEl.value);
+
+  if (duplicateCheck) {
+    errorMessage.style.visibility = 'visible';
+    errorMessage.textContent =
+      'You cannot have the same project name, please change the name';
+    event.target.previousElementSibling.focus();
+    return;
+  }
 
   if (inputEl.value.trim()) {
     const projectContainer = document.createElement('div');

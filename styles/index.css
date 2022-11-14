@@ -22,10 +22,8 @@ body {
   color: red;
   text-align: center;
   visibility: hidden;
-}
-
-.error-message::before {
-  content: 'Error: ';
+  font-weight: 600;
+  font-size: 1.1rem;
 }
 
 h4 {
