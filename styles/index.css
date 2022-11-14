@@ -18,6 +18,16 @@ body {
   font-family: 'Inter', sans-serif;
 }
 
+.error-message {
+  color: red;
+  text-align: center;
+  visibility: hidden;
+}
+
+.error-message::before {
+  content: 'Error: ';
+}
+
 h4 {
   font-weight: 900;
   font-size: 1.2rem;

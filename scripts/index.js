@@ -1,4 +1,4 @@
-import { managementContainer } from './constants.js';
+import { errorMessage, managementContainer } from './constants.js';
 
 const addNewTask = (event) => {
   const addNewCardContainer = event.target.parentNode;
@@ -90,6 +90,9 @@ const addNewProject = (event) => {
   // const currentProjectContainer = event.target.parentNode.parentNode;
 
   const inputEl = event.target.previousElementSibling;
+
+  // TODO: find out no other project has the same name.
+
   if (inputEl.value.trim()) {
     const projectContainer = document.createElement('div');
     projectContainer.classList.add('project-container');
@@ -199,26 +202,36 @@ const updateTaskProgress = (event) => {
   }
 };
 
+const clearErrorMessage = () => {
+  errorMessage.getElementsByClassName.visibility = 'hidden';
+  errorMessage.textContent = '';
+};
+
 const handleClickListener = (event) => {
   if (event.target.classList.contains('add-new-card-btn')) {
+    clearErrorMessage();
     addNewTask(event);
   }
 
   if (event.target.classList.contains('close-card')) {
+    clearErrorMessage();
     deleteTask(event);
   }
 
   if (event.target.classList.contains('add-new-list-btn')) {
+    clearErrorMessage();
     addNewProject(event);
   }
 
   if (event.target.classList.contains('project-close-btn')) {
+    clearErrorMessage();
     deleteProject(event);
   }
 };
 
 const handleChangeListener = (e) => {
   if (e.target.classList.contains('task-progress')) {
+    clearErrorMessage();
     updateTaskProgress(e);
   }
 };
