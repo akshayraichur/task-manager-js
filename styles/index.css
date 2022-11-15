@@ -1,8 +1,8 @@
 :root {
-  --primary-color: #1f2937;
-  --seconndary-color: #374151;
-  --bg-color: #111827;
-  --text-color: #f8fafc;
+  --primary-color: #e5e7eb;
+  --seconndary-color: #f9fafb;
+  --bg-color: #f9fafb;
+  --text-color: #18181b;
 }
 
 *,
@@ -42,15 +42,17 @@ h4 {
 .management-container {
   display: flex;
   overflow: scroll;
+  height: 70vh;
 }
 
 .project-container {
   background-color: var(--primary-color);
   margin: 1rem 0.5rem;
   min-width: 350px;
+  width: 350px;
   border-radius: 5px;
   padding: 1rem;
-  height: 100%;
+  overflow: scroll;
   animation: fadein 0.5s ease;
 }
 
@@ -113,6 +115,7 @@ h4 {
 }
 
 .completed {
+  width: calc(100% - 1rem);
   display: flex;
   flex-wrap: wrap;
 }
@@ -124,6 +127,7 @@ h4 {
   border-radius: 5px;
   border: 1px solid var(--primary-color);
   font-family: 'Inter', sans-serif;
+  outline: 1px solid var(--primary-color);
 }
 
 .common-btn-styles {

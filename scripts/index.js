@@ -1,4 +1,9 @@
-import { errorMessage, managementContainer } from './constants.js';
+import {
+  DEFAULT_PROJECTS,
+  DEFAULT_TASKS,
+  errorMessage,
+  managementContainer,
+} from './constants.js';
 
 const addNewTask = (event) => {
   const addNewCardContainer = event.target.parentNode;
@@ -35,6 +40,11 @@ const addNewTask = (event) => {
       newCardContainer.querySelector('.card-description');
     newCardDescription.textContent = cardDescription.value;
 
+    newCardContainer.setAttribute(
+      'data-tasks',
+      `${projectRoot.getAttribute('data-project-name')}-task`
+    );
+
     // Using innerHTML
     // newCardContainer.innerHTML = `
     //     <div class="card-heading">
@@ -57,6 +67,8 @@ const addNewTask = (event) => {
 
     cardTitle.value = '';
     cardDescription.value = '';
+
+    updateLocalStorage();
   }
 };
 
@@ -84,7 +96,8 @@ const duplicateNameCheck = (inputName) => {
   let bool = false;
 
   allProjectNodes.forEach((project) => {
-    if (project.getAttribute('data-project-name') === inputName.toLowerCase()) {
+    let projectName = project.getAttribute('data-project-name');
+    if (projectName?.toLowerCase() === inputName.toLowerCase()) {
       bool = true;
       return;
     }
@@ -163,9 +176,7 @@ const addNewProject = (event) => {
 
     mainContainer.insertBefore(projectContainer, currentProjectContainer);
 
-    let oldData = JSON.parse(localStorage.getItem('projects'));
-    let newData = oldData ? [...oldData, inputEl.value] : [inputEl.value];
-    localStorage.setItem('projects', JSON.stringify(newData));
+    updateLocalStorage();
 
     inputEl.value = '';
   }
@@ -227,6 +238,8 @@ const updateTaskProgress = (event) => {
 
     // before this, add it inside completed tasks
     projectContainer.removeChild(cardContainer);
+
+    updateLocalStorage();
   }
 };
 
@@ -264,13 +277,197 @@ const handleChangeListener = (e) => {
   }
 };
 
+const updateLocalStorage = () => {
+  /**
+   *
+   * projects structure : ['teams' , 'projects']
+   *
+   * tasks structure :
+   * {
+   *    teams: [{title: 'hi there', description: 'hello'}, {title: 'hi there', description: 'hello'}],
+   *    projects: [{title: 'hi there', description: 'hello'}, {title: 'hi there', description: 'hello'}]
+   * }
+   *
+   * completed tasks structure : [{title: 'hi there', description: 'hello'} , {title: 'hi there', description: 'hello'}]
+   *
+   */
+
+  // fetch all projects.
+  const projectContainers = managementContainer.querySelectorAll(
+    '.project-container[data-project-name]'
+  );
+
+  const completedCardContainer = document.body.querySelector(
+    '.completed-tasks-container'
+  );
+  const allCompletedTasks = completedCardContainer.querySelectorAll(
+    '.completed-card.card-container'
+  );
+
+  let projects = [];
+  let tasks = [];
+  let completedTasks = [];
+
+  allCompletedTasks.forEach((card) => {
+    let cardTitle = card.querySelector('.card-title');
+    let cardDesc = card.querySelector('.card-description');
+    completedTasks.push({
+      title: cardTitle.textContent.trim(),
+      description: cardDesc.textContent,
+    });
+  });
+
+  // O(n2) - need to improve this
+  projectContainers.forEach((project) => {
+    projects.push(project.getAttribute('data-project-name'));
+
+    const allTasks = project.querySelectorAll(
+      `[data-tasks="${project.getAttribute('data-project-name')}-task"]`
+    );
+    let taskDeatils = [];
+
+    allTasks.forEach((task) => {
+      let taskTitle = task.querySelector('.card-title');
+      let taskDescription = task.querySelector('.card-description');
+      taskDeatils.push({
+        title: taskTitle.textContent,
+        description: taskDescription.textContent,
+      });
+    });
+
+    tasks.push([...taskDeatils]);
+  });
+
+  localStorage.setItem('Projects', JSON.stringify(projects));
+  localStorage.setItem('Tasks', JSON.stringify(tasks));
+  localStorage.setItem('CompletedTasks', JSON.stringify(completedTasks));
+};
+
+const updateInitialDOM = () => {
+  let tasks = localStorage.getItem('Tasks');
+  let projects = localStorage.getItem('Projects');
+
+  // TODO: DO THE SAME THING FOR COMPLETED TASKS
+
+  if (!tasks && !projects) {
+    DEFAULT_TASKS.forEach((task, index) => {
+      // create a project
+      const projectContainer = document.createElement('div');
+      projectContainer.classList.add('project-container');
+      projectContainer.setAttribute(
+        'data-project-name',
+        DEFAULT_PROJECTS[index]
+      );
+
+      const projectTemplate = document.querySelector(
+        '#project-container-template'
+      );
+      projectContainer.appendChild(projectTemplate.content.cloneNode(true));
+      const projectTitle = projectContainer.querySelector(
+        '.title-container h4'
+      );
+      projectTitle.textContent = DEFAULT_PROJECTS[index];
+
+      const projectBtn = projectContainer.querySelector('.add-new-card-btn');
+      projectBtn.textContent = 'Add';
+      projectBtn.setAttribute('data-project-name', DEFAULT_PROJECTS[index]);
+
+      const addNewList = managementContainer.querySelector('.add-new-list');
+      const parentNewList = addNewList.parentElement;
+
+      managementContainer.insertBefore(projectContainer, parentNewList);
+
+      task.forEach((eachTask) => {
+        const projectRoot = managementContainer.querySelector(
+          `[data-project-name="${DEFAULT_PROJECTS[index]}"]`
+        );
+        const newCardContainer = document.createElement('div');
+        newCardContainer.classList.add('card-container');
+
+        // Using HTML Templates
+        const cardTemplate = document.querySelector('#card-template');
+        const newCard = cardTemplate.content.cloneNode(true);
+        newCardContainer.appendChild(newCard);
+
+        const newCardTitle = newCardContainer.querySelector('.card-title');
+        newCardTitle.textContent = eachTask.title;
+
+        const newCardDescription =
+          newCardContainer.querySelector('.card-description');
+        newCardDescription.textContent = eachTask.description;
+
+        newCardContainer.setAttribute(
+          'data-tasks',
+          `${DEFAULT_PROJECTS[index]}-task`
+        );
+
+        const addNewCardContainer = projectRoot.querySelector('.add-new-card');
+
+        projectRoot.insertBefore(newCardContainer, addNewCardContainer);
+      });
+    });
+  } else {
+    tasks = JSON.parse(tasks);
+    projects = JSON.parse(projects);
+
+    tasks.forEach((task, index) => {
+      // create a project
+      const projectContainer = document.createElement('div');
+      projectContainer.classList.add('project-container');
+      projectContainer.setAttribute('data-project-name', projects[index]);
+
+      const projectTemplate = document.querySelector(
+        '#project-container-template'
+      );
+      projectContainer.appendChild(projectTemplate.content.cloneNode(true));
+      const projectTitle = projectContainer.querySelector(
+        '.title-container h4'
+      );
+      projectTitle.textContent = projects[index];
+
+      const projectBtn = projectContainer.querySelector('.add-new-card-btn');
+      projectBtn.textContent = 'Add';
+      projectBtn.setAttribute('data-project-name', projects[index]);
+
+      const addNewList = managementContainer.querySelector('.add-new-list');
+      const parentNewList = addNewList.parentElement;
+
+      managementContainer.insertBefore(projectContainer, parentNewList);
+
+      task.forEach((eachTask) => {
+        const projectRoot = managementContainer.querySelector(
+          `[data-project-name="${projects[index]}"]`
+        );
+        const newCardContainer = document.createElement('div');
+        newCardContainer.classList.add('card-container');
+
+        // Using HTML Templates
+        const cardTemplate = document.querySelector('#card-template');
+        const newCard = cardTemplate.content.cloneNode(true);
+        newCardContainer.appendChild(newCard);
+
+        const newCardTitle = newCardContainer.querySelector('.card-title');
+        newCardTitle.textContent = eachTask.title;
+
+        const newCardDescription =
+          newCardContainer.querySelector('.card-description');
+        newCardDescription.textContent = eachTask.description;
+
+        newCardContainer.setAttribute('data-tasks', `${projects[index]}-task`);
+
+        const addNewCardContainer = projectRoot.querySelector('.add-new-card');
+
+        projectRoot.insertBefore(newCardContainer, addNewCardContainer);
+      });
+    });
+  }
+};
+
 const App = () => {
   document.addEventListener('click', handleClickListener);
   document.addEventListener('change', handleChangeListener);
 
-  window.addEventListener('beforeunload', (e) => {
-    // TODO: add/update your localStorage here.
-  });
+  updateInitialDOM();
 };
 
 App();
