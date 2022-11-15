@@ -36,6 +36,7 @@ h4 {
 .heading {
   font-weight: 900;
   padding: 1rem 0rem 0rem 1rem;
+  text-align: center;
 }
 
 .management-container {

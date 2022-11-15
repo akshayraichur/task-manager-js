@@ -219,6 +219,10 @@ const updateTaskProgress = (event) => {
     //   <p class="card-description">${cardDescription.textContent}</p>
     // `;
 
+    // removes p tag
+    if (completedTasks.querySelector('.completed-tasks-text')) {
+      completedTasks.innerHTML = '';
+    }
     completedTasks.appendChild(newCompletedTask);
 
     // before this, add it inside completed tasks
@@ -263,6 +267,10 @@ const handleChangeListener = (e) => {
 const App = () => {
   document.addEventListener('click', handleClickListener);
   document.addEventListener('change', handleChangeListener);
+
+  window.addEventListener('beforeunload', (e) => {
+    // TODO: add/update your localStorage here.
+  });
 };
 
 App();
