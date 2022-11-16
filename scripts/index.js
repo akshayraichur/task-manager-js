@@ -87,6 +87,8 @@ const deleteTask = (event) => {
   );
 
   projectRoot.removeChild(targetCardContainer);
+
+  updateLocalStorage();
 };
 
 const duplicateNameCheck = (inputName) => {
@@ -195,6 +197,8 @@ const deleteProject = (event) => {
   //   event.target.parentNode.parentNode.parentNode.parentNode;
   // const projectContainer = event.target.parentNode.parentNode.parentNode;
   mainContainer.removeChild(projectContainer);
+
+  updateLocalStorage();
 };
 
 const updateTaskProgress = (event) => {
@@ -466,6 +470,18 @@ const updateInitialDOM = () => {
 const App = () => {
   document.addEventListener('click', handleClickListener);
   document.addEventListener('change', handleChangeListener);
+
+  // Delete task & project on iOS devices
+  // https://developer.mozilla.org/en-US/docs/Web/API/Element/click_event#safari_mobile
+  document
+    .querySelectorAll('.close-card')
+    .forEach((card) => card.addEventListener('click', (e) => deleteTask(e)));
+
+  document
+    .querySelectorAll('.project-close-btn')
+    .forEach((project) =>
+      project.addEventListener('click', (e) => deleteProject(e))
+    );
 
   updateInitialDOM();
 };
