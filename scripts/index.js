@@ -135,6 +135,7 @@ const addNewProject = (event) => {
   if (inputEl.value.trim()) {
     const projectContainer = document.createElement('div');
     projectContainer.classList.add('project-container');
+    projectContainer.setAttribute('role', 'button');
     projectContainer.setAttribute('data-project-name', inputEl.value);
     const projectContainerTemplate = document.querySelector(
       '#project-container-template'
@@ -363,6 +364,7 @@ const updateInitialDOM = () => {
         'data-project-name',
         DEFAULT_PROJECTS[index]
       );
+      projectContainer.setAttribute('role', 'button');
 
       const projectTemplate = document.querySelector(
         '#project-container-template'
@@ -420,6 +422,7 @@ const updateInitialDOM = () => {
       const projectContainer = document.createElement('div');
       projectContainer.classList.add('project-container');
       projectContainer.setAttribute('data-project-name', projects[index]);
+      projectContainer.setAttribute('role', 'button');
 
       const projectTemplate = document.querySelector(
         '#project-container-template'
@@ -471,18 +474,6 @@ const updateInitialDOM = () => {
 const App = () => {
   document.addEventListener('click', handleClickListener);
   document.addEventListener('change', handleChangeListener);
-
-  // Delete task & project on iOS devices
-  // https://developer.mozilla.org/en-US/docs/Web/API/Element/click_event#safari_mobile
-  document
-    .querySelectorAll('.close-card')
-    .forEach((card) => card.addEventListener('click', (e) => deleteTask(e)));
-
-  document
-    .querySelectorAll('.project-close-btn')
-    .forEach((project) =>
-      project.addEventListener('click', (e) => deleteProject(e))
-    );
 
   updateInitialDOM();
 };
