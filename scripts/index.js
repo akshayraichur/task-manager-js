@@ -353,6 +353,7 @@ const updateInitialDOM = () => {
 
   // TODO: DO THE SAME THING FOR COMPLETED TASKS
 
+  // Refactoring needed here. 
   if (!tasks && !projects) {
     DEFAULT_TASKS.forEach((task, index) => {
       // create a project
