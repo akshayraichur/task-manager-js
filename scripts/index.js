@@ -273,6 +273,13 @@ const handleClickListener = (event) => {
     clearErrorMessage();
     deleteProject(event);
   }
+
+  if (event.target.classList.contains('reset-btn')) {
+    localStorage.removeItem('Projects');
+    localStorage.removeItem('Tasks');
+    localStorage.removeItem('CompletedTasks');
+    window.location.reload();
+  }
 };
 
 const handleChangeListener = (e) => {
@@ -349,126 +356,97 @@ const updateLocalStorage = () => {
 };
 
 const updateInitialDOM = () => {
-  let tasks = localStorage.getItem('Tasks');
-  let projects = localStorage.getItem('Projects');
+  let localTasks = localStorage.getItem('Tasks');
+  let localProjects = localStorage.getItem('Projects');
+  let localCompleted = localStorage.getItem('CompletedTasks');
 
   // TODO: DO THE SAME THING FOR COMPLETED TASKS
 
-  // Refactoring needed here. 
-  if (!tasks && !projects) {
-    DEFAULT_TASKS.forEach((task, index) => {
-      // create a project
-      const projectContainer = document.createElement('div');
-      projectContainer.classList.add('project-container');
-      projectContainer.setAttribute(
-        'data-project-name',
-        DEFAULT_PROJECTS[index]
-      );
-      projectContainer.setAttribute('role', 'button');
-
-      const projectTemplate = document.querySelector(
-        '#project-container-template'
-      );
-      projectContainer.appendChild(projectTemplate.content.cloneNode(true));
-      const projectTitle = projectContainer.querySelector(
-        '.title-container h4'
-      );
-      projectTitle.textContent = DEFAULT_PROJECTS[index];
-
-      const projectBtn = projectContainer.querySelector('.add-new-card-btn');
-      projectBtn.textContent = 'Add';
-      projectBtn.setAttribute('data-project-name', DEFAULT_PROJECTS[index]);
-
-      const addNewList = managementContainer.querySelector('.add-new-list');
-      const parentNewList = addNewList.parentElement;
-
-      managementContainer.insertBefore(projectContainer, parentNewList);
-
-      task.forEach((eachTask) => {
-        const projectRoot = managementContainer.querySelector(
-          `[data-project-name="${DEFAULT_PROJECTS[index]}"]`
-        );
-        const newCardContainer = document.createElement('div');
-        newCardContainer.classList.add('card-container');
-
-        // Using HTML Templates
-        const cardTemplate = document.querySelector('#card-template');
-        const newCard = cardTemplate.content.cloneNode(true);
-        newCardContainer.appendChild(newCard);
-
-        const newCardTitle = newCardContainer.querySelector('.card-title');
-        newCardTitle.textContent = eachTask.title;
-
-        const newCardDescription =
-          newCardContainer.querySelector('.card-description');
-        newCardDescription.textContent = eachTask.description;
-
-        newCardContainer.setAttribute(
-          'data-tasks',
-          `${DEFAULT_PROJECTS[index]}-task`
-        );
-
-        const addNewCardContainer = projectRoot.querySelector('.add-new-card');
-
-        projectRoot.insertBefore(newCardContainer, addNewCardContainer);
-      });
-    });
+  let tasks, projects, completed;
+  if (!localTasks & !localProjects) {
+    tasks = DEFAULT_TASKS;
+    projects = DEFAULT_PROJECTS;
+    completed = [];
   } else {
-    tasks = JSON.parse(tasks);
-    projects = JSON.parse(projects);
-
-    tasks.forEach((task, index) => {
-      // create a project
-      const projectContainer = document.createElement('div');
-      projectContainer.classList.add('project-container');
-      projectContainer.setAttribute('data-project-name', projects[index]);
-      projectContainer.setAttribute('role', 'button');
-
-      const projectTemplate = document.querySelector(
-        '#project-container-template'
-      );
-      projectContainer.appendChild(projectTemplate.content.cloneNode(true));
-      const projectTitle = projectContainer.querySelector(
-        '.title-container h4'
-      );
-      projectTitle.textContent = projects[index];
-
-      const projectBtn = projectContainer.querySelector('.add-new-card-btn');
-      projectBtn.textContent = 'Add';
-      projectBtn.setAttribute('data-project-name', projects[index]);
-
-      const addNewList = managementContainer.querySelector('.add-new-list');
-      const parentNewList = addNewList.parentElement;
-
-      managementContainer.insertBefore(projectContainer, parentNewList);
-
-      task.forEach((eachTask) => {
-        const projectRoot = managementContainer.querySelector(
-          `[data-project-name="${projects[index]}"]`
-        );
-        const newCardContainer = document.createElement('div');
-        newCardContainer.classList.add('card-container');
-
-        // Using HTML Templates
-        const cardTemplate = document.querySelector('#card-template');
-        const newCard = cardTemplate.content.cloneNode(true);
-        newCardContainer.appendChild(newCard);
-
-        const newCardTitle = newCardContainer.querySelector('.card-title');
-        newCardTitle.textContent = eachTask.title;
-
-        const newCardDescription =
-          newCardContainer.querySelector('.card-description');
-        newCardDescription.textContent = eachTask.description;
-
-        newCardContainer.setAttribute('data-tasks', `${projects[index]}-task`);
-
-        const addNewCardContainer = projectRoot.querySelector('.add-new-card');
-
-        projectRoot.insertBefore(newCardContainer, addNewCardContainer);
-      });
-    });
+    tasks = JSON.parse(localTasks);
+    projects = JSON.parse(localProjects);
+    completed = JSON.parse(localCompleted);
   }
+
+  // For Completed tasks
+  completed.forEach((task) => {
+    const completedTasks = document.querySelector('.completed');
+    const newCompletedTask = document.createElement('div');
+    newCompletedTask.className = 'completed-card card-container';
+
+    const completedCardTemplate = document.querySelector(
+      '#completed-add-card-template'
+    );
+    const completedCard = completedCardTemplate.content.cloneNode(true);
+    newCompletedTask.appendChild(completedCard);
+
+    const completedCardTitle = newCompletedTask.querySelector('.card-title');
+    completedCardTitle.textContent = task.title;
+    const completedCardDesc =
+      newCompletedTask.querySelector('.card-description');
+    completedCardDesc.textContent = task.description;
+
+    if (completedTasks.querySelector('.completed-tasks-text')) {
+      completedTasks.innerHTML = '';
+    }
+    completedTasks.appendChild(newCompletedTask);
+  });
+
+  // For tasks & projects O(n^2)
+  tasks.forEach((task, index) => {
+    // create a project
+    const projectContainer = document.createElement('article');
+    projectContainer.classList.add('project-container');
+    projectContainer.setAttribute('data-project-name', projects[index]);
+    projectContainer.setAttribute('role', 'button');
+
+    const projectTemplate = document.querySelector(
+      '#project-container-template'
+    );
+    projectContainer.appendChild(projectTemplate.content.cloneNode(true));
+    const projectTitle = projectContainer.querySelector('.title-container h4');
+    projectTitle.textContent = projects[index];
+
+    const projectBtn = projectContainer.querySelector('.add-new-card-btn');
+    projectBtn.textContent = 'Add';
+    projectBtn.setAttribute('data-project-name', projects[index]);
+
+    const addNewList = managementContainer.querySelector('.add-new-list');
+    const parentNewList = addNewList.parentElement;
+
+    managementContainer.insertBefore(projectContainer, parentNewList);
+
+    task.forEach((eachTask) => {
+      const projectRoot = managementContainer.querySelector(
+        `[data-project-name="${projects[index]}"]`
+      );
+      const newCardContainer = document.createElement('div');
+      newCardContainer.classList.add('card-container');
+
+      // Using HTML Templates
+      const cardTemplate = document.querySelector('#card-template');
+      const newCard = cardTemplate.content.cloneNode(true);
+      newCardContainer.appendChild(newCard);
+
+      const newCardTitle = newCardContainer.querySelector('.card-title');
+      newCardTitle.textContent = eachTask.title;
+
+      const newCardDescription =
+        newCardContainer.querySelector('.card-description');
+      newCardDescription.textContent = eachTask.description;
+
+      newCardContainer.setAttribute('data-tasks', `${projects[index]}-task`);
+
+      const addNewCardContainer = projectRoot.querySelector('.add-new-card');
+
+      projectRoot.insertBefore(newCardContainer, addNewCardContainer);
+    });
+  });
 };
 
 const App = () => {

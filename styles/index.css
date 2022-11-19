@@ -19,6 +19,12 @@ body {
   font-family: 'Inter', sans-serif;
 }
 
+.heading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .error-message {
   color: #f87171;
   text-align: center;
@@ -37,6 +43,18 @@ h4 {
   font-weight: 900;
   padding: 1rem 0rem 0rem 1rem;
   text-align: center;
+  flex-grow: 2;
+}
+
+.heading-container button {
+  padding: 0.5rem 0.5rem;
+  margin: 0 1rem;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  width: 80px;
+  border: 2px solid #f87171;
+  border-radius: 5px;
+  background-color: var(--seconndary-color);
 }
 
 .management-container {
@@ -160,5 +178,9 @@ h4 {
 @media only screen and (max-width: 500px) {
   .completed-card {
     width: 100%;
+  }
+
+  .heading {
+    font-size: 1.12rem;
   }
 }
