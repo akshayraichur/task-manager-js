@@ -1,9 +1,4 @@
-import {
-  DEFAULT_PROJECTS,
-  DEFAULT_TASKS,
-  errorMessage,
-  managementContainer,
-} from './constants.js';
+import { DEFAULT_PROJECTS, DEFAULT_TASKS, errorMessage, managementContainer } from "./constants.js";
 
 const addNewTask = (event) => {
   const addNewCardContainer = event.target.parentNode;
@@ -11,10 +6,8 @@ const addNewTask = (event) => {
   const cardTitle = cardDescription.previousElementSibling;
 
   // instead of having to run a loop, we can get the data like this as well.
-  const attributeName = event.target.getAttribute('data-project-name');
-  const projectRoot = managementContainer.querySelector(
-    `[data-project-name="${attributeName}"]`
-  );
+  const attributeName = event.target.getAttribute("data-project-name");
+  const projectRoot = managementContainer.querySelector(`[data-project-name="${attributeName}"]`);
 
   // event.path gives out the path through which event got bubbled up.
   // in this path, we are finding the parent element of the container.
@@ -25,25 +18,21 @@ const addNewTask = (event) => {
   // const projectRoot = event.target.parentNode.parentNode;
 
   if (cardTitle.value.trim() && cardDescription.value.trim()) {
-    const newCardContainer = document.createElement('div');
-    newCardContainer.classList.add('card-container');
+    const newCardContainer = document.createElement("div");
+    newCardContainer.classList.add("card-container");
 
     // Using HTML Templates
-    const cardTemplate = document.querySelector('#card-template');
+    const cardTemplate = document.querySelector("#card-template");
     const newCard = cardTemplate.content.cloneNode(true);
     newCardContainer.appendChild(newCard);
 
-    const newCardTitle = newCardContainer.querySelector('.card-title');
+    const newCardTitle = newCardContainer.querySelector(".card-title");
     newCardTitle.textContent = cardTitle.value;
 
-    const newCardDescription =
-      newCardContainer.querySelector('.card-description');
+    const newCardDescription = newCardContainer.querySelector(".card-description");
     newCardDescription.textContent = cardDescription.value;
 
-    newCardContainer.setAttribute(
-      'data-tasks',
-      `${projectRoot.getAttribute('data-project-name')}-task`
-    );
+    newCardContainer.setAttribute("data-tasks", `${projectRoot.getAttribute("data-project-name")}-task`);
 
     // Using innerHTML
     // newCardContainer.innerHTML = `
@@ -65,8 +54,8 @@ const addNewTask = (event) => {
 
     projectRoot.insertBefore(newCardContainer, addNewCardContainer);
 
-    cardTitle.value = '';
-    cardDescription.value = '';
+    cardTitle.value = "";
+    cardDescription.value = "";
 
     updateLocalStorage();
   }
@@ -79,12 +68,8 @@ const deleteTask = (event) => {
   // const targetCardContainer = event.target.parentNode.parentNode.parentNode;
   // const projectRoot = event.target.parentNode.parentNode.parentNode.parentNode;
 
-  const targetCardContainer = event.path.find((el) =>
-    el.classList?.contains('card-container')
-  );
-  const projectRoot = event.path.find((el) =>
-    el.classList?.contains('project-container')
-  );
+  const targetCardContainer = event.composedPath().find((el) => el.classList?.contains("card-container"));
+  const projectRoot = event.composedPath().find((el) => el.classList?.contains("project-container"));
 
   projectRoot.removeChild(targetCardContainer);
 
@@ -92,13 +77,12 @@ const deleteTask = (event) => {
 };
 
 const duplicateNameCheck = (inputName) => {
-  const allProjectNodes =
-    managementContainer.querySelectorAll('.project-container');
+  const allProjectNodes = managementContainer.querySelectorAll(".project-container");
 
   let bool = false;
 
   allProjectNodes.forEach((project) => {
-    let projectName = project.getAttribute('data-project-name');
+    let projectName = project.getAttribute("data-project-name");
     if (projectName?.toLowerCase() === inputName.toLowerCase()) {
       bool = true;
       return;
@@ -110,12 +94,8 @@ const duplicateNameCheck = (inputName) => {
 
 const addNewProject = (event) => {
   // managementContainer
-  const mainContainer = event.path.find((el) =>
-    el.classList?.contains('management-container')
-  );
-  const currentProjectContainer = event.path.find((el) =>
-    el.classList?.contains('project-container')
-  );
+  const mainContainer = event.composedPath().find((el) => el.classList?.contains("management-container"));
+  const currentProjectContainer = event.composedPath().find((el) => el.classList?.contains("project-container"));
 
   // const mainContainer = event.target.parentNode.parentNode.parentNode;
   // const currentProjectContainer = event.target.parentNode.parentNode;
@@ -125,34 +105,29 @@ const addNewProject = (event) => {
   let duplicateCheck = duplicateNameCheck(inputEl.value);
 
   if (duplicateCheck) {
-    errorMessage.style.visibility = 'visible';
-    errorMessage.textContent =
-      'You cannot have the same project name, please change the name';
+    errorMessage.style.visibility = "visible";
+    errorMessage.textContent = "You cannot have the same project name, please change the name";
     event.target.previousElementSibling.focus();
     return;
   }
 
   if (inputEl.value.trim()) {
-    const projectContainer = document.createElement('div');
-    projectContainer.classList.add('project-container');
-    projectContainer.setAttribute('role', 'button');
-    projectContainer.setAttribute('data-project-name', inputEl.value);
-    const projectContainerTemplate = document.querySelector(
-      '#project-container-template'
-    );
+    const projectContainer = document.createElement("div");
+    projectContainer.classList.add("project-container");
+    projectContainer.setAttribute("role", "button");
+    projectContainer.setAttribute("data-project-name", inputEl.value);
+    const projectContainerTemplate = document.querySelector("#project-container-template");
 
     // Using HTML Templates
     const newProject = projectContainerTemplate.content.cloneNode(true);
 
     projectContainer.appendChild(newProject);
-    const newProjectTitle = projectContainer.querySelector(
-      '.title-container h4'
-    );
+    const newProjectTitle = projectContainer.querySelector(".title-container h4");
 
     newProjectTitle.textContent = inputEl.value;
-    const newProjectBtn = projectContainer.querySelector('.add-new-card-btn');
-    newProjectBtn.textContent = 'Add';
-    newProjectBtn.setAttribute('data-project-name', `${inputEl.value}`);
+    const newProjectBtn = projectContainer.querySelector(".add-new-card-btn");
+    newProjectBtn.textContent = "Add";
+    newProjectBtn.setAttribute("data-project-name", `${inputEl.value}`);
 
     // INNER-HTML Method
     // projectContainer.innerHTML = `
@@ -181,18 +156,14 @@ const addNewProject = (event) => {
 
     updateLocalStorage();
 
-    inputEl.value = '';
+    inputEl.value = "";
   }
 };
 
 const deleteProject = (event) => {
-  const mainContainer = event.path.find((el) =>
-    el.classList?.contains('management-container')
-  );
+  const mainContainer = event.composedPath().find((el) => el.classList?.contains("management-container"));
 
-  const projectContainer = event.path.find((el) =>
-    el.classList?.contains('project-container')
-  );
+  const projectContainer = event.composedPath().find((el) => el.classList?.contains("project-container"));
 
   // const mainContainer =
   //   event.target.parentNode.parentNode.parentNode.parentNode;
@@ -203,28 +174,25 @@ const deleteProject = (event) => {
 };
 
 const updateTaskProgress = (event) => {
-  if (event.target.value === 'completed') {
+  if (event.target.value === "completed") {
     const cardContainer = event.target.parentNode;
     const projectContainer = event.target.parentNode.parentNode;
 
     const cardDescription = event.target.previousElementSibling;
     const cardTitle = cardDescription.previousElementSibling;
 
-    const completedTasks = document.querySelector('.completed');
-    const newCompletedTask = document.createElement('div');
-    newCompletedTask.className = 'completed-card card-container';
+    const completedTasks = document.querySelector(".completed");
+    const newCompletedTask = document.createElement("div");
+    newCompletedTask.className = "completed-card card-container";
 
     // Using HTML Templates
-    const completedCardTemplate = document.querySelector(
-      '#completed-add-card-template'
-    );
+    const completedCardTemplate = document.querySelector("#completed-add-card-template");
     const completedCard = completedCardTemplate.content.cloneNode(true);
     newCompletedTask.appendChild(completedCard);
 
-    const completedCardTitle = newCompletedTask.querySelector('.card-title');
+    const completedCardTitle = newCompletedTask.querySelector(".card-title");
     completedCardTitle.textContent = cardTitle.textContent;
-    const completedCardDesc =
-      newCompletedTask.querySelector('.card-description');
+    const completedCardDesc = newCompletedTask.querySelector(".card-description");
     completedCardDesc.textContent = cardDescription.textContent;
 
     // inner html method
@@ -236,8 +204,8 @@ const updateTaskProgress = (event) => {
     // `;
 
     // removes p tag
-    if (completedTasks.querySelector('.completed-tasks-text')) {
-      completedTasks.innerHTML = '';
+    if (completedTasks.querySelector(".completed-tasks-text")) {
+      completedTasks.innerHTML = "";
     }
     completedTasks.appendChild(newCompletedTask);
 
@@ -249,41 +217,41 @@ const updateTaskProgress = (event) => {
 };
 
 const clearErrorMessage = () => {
-  errorMessage.getElementsByClassName.visibility = 'hidden';
-  errorMessage.textContent = '';
+  errorMessage.getElementsByClassName.visibility = "hidden";
+  errorMessage.textContent = "";
 };
 
 const handleClickListener = (event) => {
-  if (event.target.classList.contains('add-new-card-btn')) {
+  if (event.target.classList.contains("add-new-card-btn")) {
     clearErrorMessage();
     addNewTask(event);
   }
 
-  if (event.target.classList.contains('close-card')) {
+  if (event.target.classList.contains("close-card")) {
     clearErrorMessage();
     deleteTask(event);
   }
 
-  if (event.target.classList.contains('add-new-list-btn')) {
+  if (event.target.classList.contains("add-new-list-btn")) {
     clearErrorMessage();
     addNewProject(event);
   }
 
-  if (event.target.classList.contains('project-close-btn')) {
+  if (event.target.classList.contains("project-close-btn")) {
     clearErrorMessage();
     deleteProject(event);
   }
 
-  if (event.target.classList.contains('reset-btn')) {
-    localStorage.removeItem('Projects');
-    localStorage.removeItem('Tasks');
-    localStorage.removeItem('CompletedTasks');
+  if (event.target.classList.contains("reset-btn")) {
+    localStorage.removeItem("Projects");
+    localStorage.removeItem("Tasks");
+    localStorage.removeItem("CompletedTasks");
     window.location.reload();
   }
 };
 
 const handleChangeListener = (e) => {
-  if (e.target.classList.contains('task-progress')) {
+  if (e.target.classList.contains("task-progress")) {
     clearErrorMessage();
     updateTaskProgress(e);
   }
@@ -305,24 +273,18 @@ const updateLocalStorage = () => {
    */
 
   // fetch all projects.
-  const projectContainers = managementContainer.querySelectorAll(
-    '.project-container[data-project-name]'
-  );
+  const projectContainers = managementContainer.querySelectorAll(".project-container[data-project-name]");
 
-  const completedCardContainer = document.body.querySelector(
-    '.completed-tasks-container'
-  );
-  const allCompletedTasks = completedCardContainer.querySelectorAll(
-    '.completed-card.card-container'
-  );
+  const completedCardContainer = document.body.querySelector(".completed-tasks-container");
+  const allCompletedTasks = completedCardContainer.querySelectorAll(".completed-card.card-container");
 
   let projects = [];
   let tasks = [];
   let completedTasks = [];
 
   allCompletedTasks.forEach((card) => {
-    let cardTitle = card.querySelector('.card-title');
-    let cardDesc = card.querySelector('.card-description');
+    let cardTitle = card.querySelector(".card-title");
+    let cardDesc = card.querySelector(".card-description");
     completedTasks.push({
       title: cardTitle.textContent.trim(),
       description: cardDesc.textContent,
@@ -331,16 +293,14 @@ const updateLocalStorage = () => {
 
   // O(n2) - need to improve this
   projectContainers.forEach((project) => {
-    projects.push(project.getAttribute('data-project-name'));
+    projects.push(project.getAttribute("data-project-name"));
 
-    const allTasks = project.querySelectorAll(
-      `[data-tasks="${project.getAttribute('data-project-name')}-task"]`
-    );
+    const allTasks = project.querySelectorAll(`[data-tasks="${project.getAttribute("data-project-name")}-task"]`);
     let taskDeatils = [];
 
     allTasks.forEach((task) => {
-      let taskTitle = task.querySelector('.card-title');
-      let taskDescription = task.querySelector('.card-description');
+      let taskTitle = task.querySelector(".card-title");
+      let taskDescription = task.querySelector(".card-description");
       taskDeatils.push({
         title: taskTitle.textContent,
         description: taskDescription.textContent,
@@ -350,15 +310,15 @@ const updateLocalStorage = () => {
     tasks.push([...taskDeatils]);
   });
 
-  localStorage.setItem('Projects', JSON.stringify(projects));
-  localStorage.setItem('Tasks', JSON.stringify(tasks));
-  localStorage.setItem('CompletedTasks', JSON.stringify(completedTasks));
+  localStorage.setItem("Projects", JSON.stringify(projects));
+  localStorage.setItem("Tasks", JSON.stringify(tasks));
+  localStorage.setItem("CompletedTasks", JSON.stringify(completedTasks));
 };
 
 const updateInitialDOM = () => {
-  let localTasks = localStorage.getItem('Tasks');
-  let localProjects = localStorage.getItem('Projects');
-  let localCompleted = localStorage.getItem('CompletedTasks');
+  let localTasks = localStorage.getItem("Tasks");
+  let localProjects = localStorage.getItem("Projects");
+  let localCompleted = localStorage.getItem("CompletedTasks");
 
   // TODO: DO THE SAME THING FOR COMPLETED TASKS
 
@@ -375,24 +335,21 @@ const updateInitialDOM = () => {
 
   // For Completed tasks
   completed.forEach((task) => {
-    const completedTasks = document.querySelector('.completed');
-    const newCompletedTask = document.createElement('div');
-    newCompletedTask.className = 'completed-card card-container';
+    const completedTasks = document.querySelector(".completed");
+    const newCompletedTask = document.createElement("div");
+    newCompletedTask.className = "completed-card card-container";
 
-    const completedCardTemplate = document.querySelector(
-      '#completed-add-card-template'
-    );
+    const completedCardTemplate = document.querySelector("#completed-add-card-template");
     const completedCard = completedCardTemplate.content.cloneNode(true);
     newCompletedTask.appendChild(completedCard);
 
-    const completedCardTitle = newCompletedTask.querySelector('.card-title');
+    const completedCardTitle = newCompletedTask.querySelector(".card-title");
     completedCardTitle.textContent = task.title;
-    const completedCardDesc =
-      newCompletedTask.querySelector('.card-description');
+    const completedCardDesc = newCompletedTask.querySelector(".card-description");
     completedCardDesc.textContent = task.description;
 
-    if (completedTasks.querySelector('.completed-tasks-text')) {
-      completedTasks.innerHTML = '';
+    if (completedTasks.querySelector(".completed-tasks-text")) {
+      completedTasks.innerHTML = "";
     }
     completedTasks.appendChild(newCompletedTask);
   });
@@ -400,49 +357,44 @@ const updateInitialDOM = () => {
   // For tasks & projects O(n^2)
   tasks.forEach((task, index) => {
     // create a project
-    const projectContainer = document.createElement('article');
-    projectContainer.classList.add('project-container');
-    projectContainer.setAttribute('data-project-name', projects[index]);
-    projectContainer.setAttribute('role', 'button');
+    const projectContainer = document.createElement("article");
+    projectContainer.classList.add("project-container");
+    projectContainer.setAttribute("data-project-name", projects[index]);
+    projectContainer.setAttribute("role", "button");
 
-    const projectTemplate = document.querySelector(
-      '#project-container-template'
-    );
+    const projectTemplate = document.querySelector("#project-container-template");
     projectContainer.appendChild(projectTemplate.content.cloneNode(true));
-    const projectTitle = projectContainer.querySelector('.title-container h4');
+    const projectTitle = projectContainer.querySelector(".title-container h4");
     projectTitle.textContent = projects[index];
 
-    const projectBtn = projectContainer.querySelector('.add-new-card-btn');
-    projectBtn.textContent = 'Add';
-    projectBtn.setAttribute('data-project-name', projects[index]);
+    const projectBtn = projectContainer.querySelector(".add-new-card-btn");
+    projectBtn.textContent = "Add";
+    projectBtn.setAttribute("data-project-name", projects[index]);
 
-    const addNewList = managementContainer.querySelector('.add-new-list');
+    const addNewList = managementContainer.querySelector(".add-new-list");
     const parentNewList = addNewList.parentElement;
 
     managementContainer.insertBefore(projectContainer, parentNewList);
 
     task.forEach((eachTask) => {
-      const projectRoot = managementContainer.querySelector(
-        `[data-project-name="${projects[index]}"]`
-      );
-      const newCardContainer = document.createElement('div');
-      newCardContainer.classList.add('card-container');
+      const projectRoot = managementContainer.querySelector(`[data-project-name="${projects[index]}"]`);
+      const newCardContainer = document.createElement("div");
+      newCardContainer.classList.add("card-container");
 
       // Using HTML Templates
-      const cardTemplate = document.querySelector('#card-template');
+      const cardTemplate = document.querySelector("#card-template");
       const newCard = cardTemplate.content.cloneNode(true);
       newCardContainer.appendChild(newCard);
 
-      const newCardTitle = newCardContainer.querySelector('.card-title');
+      const newCardTitle = newCardContainer.querySelector(".card-title");
       newCardTitle.textContent = eachTask.title;
 
-      const newCardDescription =
-        newCardContainer.querySelector('.card-description');
+      const newCardDescription = newCardContainer.querySelector(".card-description");
       newCardDescription.textContent = eachTask.description;
 
-      newCardContainer.setAttribute('data-tasks', `${projects[index]}-task`);
+      newCardContainer.setAttribute("data-tasks", `${projects[index]}-task`);
 
-      const addNewCardContainer = projectRoot.querySelector('.add-new-card');
+      const addNewCardContainer = projectRoot.querySelector(".add-new-card");
 
       projectRoot.insertBefore(newCardContainer, addNewCardContainer);
     });
@@ -450,8 +402,8 @@ const updateInitialDOM = () => {
 };
 
 const App = () => {
-  document.addEventListener('click', handleClickListener);
-  document.addEventListener('change', handleChangeListener);
+  document.addEventListener("click", handleClickListener);
+  document.addEventListener("change", handleChangeListener);
 
   updateInitialDOM();
 };
